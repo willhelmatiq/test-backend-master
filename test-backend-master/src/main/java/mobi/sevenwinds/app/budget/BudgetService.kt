@@ -14,6 +14,7 @@ object BudgetService {
                 this.month = body.month
                 this.amount = body.amount
                 this.type = body.type
+                this.author = body.author_id
             }
 
             return@transaction entity.toResponse()

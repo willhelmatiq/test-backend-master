@@ -31,7 +31,13 @@ object BudgetService {
                 .limit(param.limit, param.offset)
 
             val total = query.count()
-            val data = BudgetEntity.wrapRows(query).map { it.toResponse() }
+            var data = BudgetEntity.wrapRows(query).map { it.toResponse() }
+            if(param.authorName != null) {
+                data = data.filter { it.author_id != null && AuthorTable.select { AuthorTable.id eq it.author_id }.first()[AuthorTable.name].toLowerCase().contains(
+                    param.authorName.toString().toLowerCase()
+                )}
+            }
+
             val sumByType = data.groupBy { it.type.name }.mapValues { it.value.sumOf { v -> v.amount } }
             val budgetRecordMapToAuthorsName = data.stream().filter { it.author_id !=  null }.collect(Collectors.toList())
                 .map {it.id.toString() to  AuthorTable.select { AuthorTable.id eq it.author_id }.first()[AuthorTable.name] }.toMap()

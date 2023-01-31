@@ -15,14 +15,13 @@ object BudgetTable : IntIdTable("budget") {
 
 class BudgetEntity(id: EntityID<Int>) : IntEntity(id) {
     companion object : IntEntityClass<BudgetEntity>(BudgetTable)
-
     var year by BudgetTable.year
     var month by BudgetTable.month
     var amount by BudgetTable.amount
     var type by BudgetTable.type
     var author_id by BudgetTable.author_id
 
-    fun toResponse(): BudgetRecord {
-        return BudgetRecord(year, month, amount, type, author_id)
+    fun toResponse(): BudgetRecordResponse {
+        return BudgetRecordResponse(id.value, year, month, amount, type, author_id)
     }
 }
